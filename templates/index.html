@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Рекомендации товаров</title>
+    <style>
+        a {
+            color: inherit; /* Наследовать цвет текста */
+            text-decoration: none; /* Убрать подчёркивание */
+        }
+        
+        a:hover {
+            text-decoration: underline; /* Добавить подчёркивание при наведении (по желанию) */
+            color: #4CAF50; /* Сменить цвет при наведении (по желанию) */
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            color: #000;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .container {
+            width: 80%;
+            margin: 40px auto;
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        select {
+            width: 100%;
+            height: 40px;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            height: 40px;
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #3e8e41;
+            transform: scale(1.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        th {
+            background-color: #f0f0f0;
+        }
+
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Рекомендации товаров</h1>
+        <form method="POST">
+            <label for="user_group">Группа:</label>
+            <select id="user_group" name="user_group">
+                {% for group in user_groups %}
+                    <option value="{{ group }}">{{ group }}</option>
+                {% endfor %}
+            </select><br><br>
+
+            <label for="user_price_category">Ценовая категория:</label>
+            <select id="user_price_category" name="user_price_category">
+                {% for price_category in user_price_categories %}
+                    <option value="{{ price_category }}">{{ price_category }}</option>
+                {% endfor %}
+            </select><br><br>
+
+            <input type="submit" value="Получить рекомендации">
+        </form>
+
+        <h2>Рекомендации:</h2>
+        {% if recommendations %}
+            {% if recommendations[0].get('error') %}
+                <p class="error">Ошибка: {{ recommendations[0].error }}</p>
+            {% else %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Название</th>
+                            <th>Рейтинг</th>
+                            <th>Цена</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for rec in recommendations %}
+                            <tr>
+                                <td><a href="{{ rec['Ссылка'] }}" target="_blank">{{ rec.Название }}</a></td>
+                                <td>{{ rec.Рейтинг }}</td>
+                                <td>{{ rec.Цена }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        {% else %}
+            <p>Нет рекомендаций.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
